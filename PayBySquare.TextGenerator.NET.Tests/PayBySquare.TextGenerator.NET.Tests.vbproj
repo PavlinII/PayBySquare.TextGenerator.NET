@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PayBySquareTextGenerator.Tests</RootNamespace>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <Authors>Ing. Pavel Mikula</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PayBySquare.TextGenerator.NET\PayBySquare.TextGenerator.NET.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Import Include="PayBySquareTextGenerator" />
+  </ItemGroup>
+
+</Project>

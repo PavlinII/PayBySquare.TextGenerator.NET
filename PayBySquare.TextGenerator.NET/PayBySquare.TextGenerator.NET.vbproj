@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>PayBySquare.TextGenerator.NET</RootNamespace>
+    <RootNamespace>PayBySquareTextGenerator</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Ing. Pavel Mikula</Authors>
   </PropertyGroup>
 
 </Project>
