@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.bysquare.com/bysquare" xmlns:tns="http://www.bysquare.com/bysquare" elementFormDefault="qualified" xmlns:bysquare="http://www.bysquare.com/bysquare-addons">
+	<complexType name="BySquareDocument" abstract="true" />
+	<element name="Pay" type="tns:PayBase" bysquare:bysquareType="0" bysquare:version="0" />
+	<complexType name="Pay" bysquare:documentType="0">
+		<complexContent>
+			<extension base="tns:PayBase" bysquare:order="1" />
+		</complexContent>
+	</complexType>
+	<simpleType name="CurrencyCode">
+		<annotation>
+			<documentation>3 letter ISO4217 code</documentation>
+		</annotation>
+		<restriction base="string">
+			<pattern value="[A-Z]{3}" />
+		</restriction>
+	</simpleType>
+	<complexType name="PayBase" abstract="true">
+		<complexContent>
+			<extension base="tns:BySquareDocument">
+				<sequence>
+					<element name="InvoiceID" type="string" minOccurs="0" bysquare:maxLength="10" bysquare:priority="2" bysquare:order="1">
+						<annotation>
+							<documentation>Invoice identification code. Only used when pay by square is part of the invoice. Otherwise this field is empty.</documentation>
+						</annotation>
+					</element>
+					<element name="Payments" type="tns:Payments" bysquare:order="2">
+						<annotation>
+							<documentation>Lists one or more payments.</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="Payments">
+		<sequence>
+			<element name="Payment" type="tns:Payment" maxOccurs="unbounded" bysquare:order="1">
+				<annotation>
+					<documentation>Payment order definition.</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="Payment">
+		<sequence>
+			<element name="PaymentOptions" type="tns:PaymentOptions" bysquare:maxLength="1" bysquare:priority="999" bysquare:order="1">
+				<annotation>
+					<documentation>Define which payment options are available: "paymentorder", "standingorder" - requires StandingOrderExt, "directdebit" - requires DirectDebitExt.</documentation>
+				</annotation>
+			</element>
+			<element name="Amount" type="decimal" minOccurs="0" bysquare:maxLength="15" bysquare:priority="999" bysquare:order="2">
+				<annotation>
+					<documentation>payment amount</documentation>
+				</annotation>
+			</element>
+			<element name="CurrencyCode" type="tns:CurrencyCode" bysquare:maxLength="3" bysquare:priority="999" bysquare:order="3">
+				<annotation>
+					<documentation>payment currency code, 3 letter ISO4217 code
+					</documentation>
+				</annotation>
+			</element>
+			<element name="PaymentDueDate" type="date" minOccurs="0" bysquare:maxLength="8" bysquare:priority="999" bysquare:order="4">
+				<annotation>
+					<documentation>payment due date. Used also as first payment date for standing order.
+					</documentation>
+				</annotation>
+			</element>
+			<choice minOccurs="0">
+				<sequence>
+					<element name="VariableSymbol" type="tns:VariableSymbol" minOccurs="0" bysquare:maxLength="10" bysquare:priority="7" bysquare:order="5">
+						<annotation>
+							<documentation>variable symbol</documentation>
+						</annotation>
+					</element>
+					<element name="ConstantSymbol" type="tns:ConstantSymbol" minOccurs="0" bysquare:maxLength="4" bysquare:priority="5" bysquare:order="6">
+						<annotation>
+							<documentation>constant symbol</documentation>
+						</annotation>
+					</element>
+					<element name="SpecificSymbol" type="tns:SpecificSymbol" minOccurs="0" bysquare:maxLength="10" bysquare:priority="6" bysquare:order="7">
+						<annotation>
+							<documentation>specific symbol</documentation>
+						</annotation>
+					</element>
+				</sequence>
+				<element name="OriginatorsReferenceInformation" type="string" minOccurs="0" bysquare:maxLength="35" bysquare:priority="12" bysquare:order="8">
+					<annotation>
+						<documentation>reference information</documentation>
+					</annotation>
+				</element>
+			</choice>
+			<element name="PaymentNote" type="string" minOccurs="0" bysquare:maxLength="140" bysquare:priority="1" bysquare:order="9">
+				<annotation>
+					<documentation>payment note</documentation>
+				</annotation>
+			</element>
+			<element name="BankAccounts" type="tns:BankAccounts" bysquare:order="10">
+				<annotation>
+					<documentation>list of bank accounts</documentation>
+				</annotation>
+			</element>
+			<element name="StandingOrderExt" type="tns:StandingOrderExt" minOccurs="0" bysquare:order="11">
+				<annotation>
+					<documentation>standing order extension. Extends basic payment information with information required for standing order setup</documentation>
+				</annotation>
+			</element>
+			<element name="DirectDebitExt" type="tns:DirectDebitExt" minOccurs="0" bysquare:order="12">
+				<annotation>
+					<documentation>direct debit extension. Extends basic payment information with information required for identification and setup of direct debit</documentation>
+				</annotation>
+			</element>
+			<element name="BeneficiaryName" type="string" minOccurs="0" bysquare:maxLength="70" bysquare:priority="999" bysquare:order="13">
+				<annotation>
+					<documentation></documentation>
+				</annotation>
+			</element>
+			<element name="BeneficiaryAddressLine1" type="string" minOccurs="0" bysquare:maxLength="70" bysquare:priority="999" bysquare:order="14">
+				<annotation>
+					<documentation></documentation>
+				</annotation>
+			</element>
+			<element name="BeneficiaryAddressLine2" type="string" minOccurs="0" bysquare:maxLength="70" bysquare:priority="999" bysquare:order="15">
+				<annotation>
+					<documentation></documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<simpleType name="PaymentOptions">
+		<list itemType="tns:PaymentOption" />
+	</simpleType>
+	<simpleType name="PaymentOption">
+		<restriction base="string">
+			<enumeration value="paymentorder">
+				<annotation>
+					<appinfo>1</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="standingorder">
+				<annotation>
+					<appinfo>2</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="directdebit">
+				<annotation>
+					<appinfo>4</appinfo>
+				</annotation>
+			</enumeration>
+		</restriction>
+	</simpleType>
+	<simpleType name="VariableSymbol">
+		<restriction base="string">
+			<pattern value="[0-9]{0,10}"></pattern>
+		</restriction>
+	</simpleType>
+	<simpleType name="ConstantSymbol">
+		<restriction base="string">
+			<pattern value="[0-9]{0,4}"></pattern>
+		</restriction>
+	</simpleType>
+	<simpleType name="SpecificSymbol">
+		<restriction base="string">
+			<pattern value="[0-9]{0,10}"></pattern>
+		</restriction>
+	</simpleType>
+	<complexType name="BankAccounts">
+		<sequence>
+			<annotation>
+				<documentation>list of bank accounts</documentation>
+			</annotation>
+			<element name="BankAccount" type="tns:BankAccount" maxOccurs="unbounded" bysquare:order="1">
+				<annotation>
+					<documentation>single bank account</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="BankAccount">
+		<annotation>
+			<documentation>single bank account</documentation>
+		</annotation>
+		<sequence>
+			<element name="IBAN" type="tns:IBAN" bysquare:maxLength="34" bysquare:priority="999" bysquare:order="1">
+				<annotation>
+					<documentation>IBAN code</documentation>
+				</annotation>
+			</element>
+			<element name="BIC" type="tns:BIC" bysquare:maxLength="11" bysquare:priority="999" bysquare:order="2" minOccurs="0">
+				<annotation>
+					<documentation>SWIFT code</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<simpleType name="IBAN">
+		<annotation>
+			<documentation>IBAN code</documentation>
+		</annotation>
+		<restriction base="string">
+			<pattern value="[A-Z]{2}[0-9]{2}[A-Z0-9]{0,30}" />
+		</restriction>
+	</simpleType>
+	<simpleType name="BIC">
+		<annotation>
+			<documentation>BIC code type according to ISO 9362</documentation>
+		</annotation>
+		<restriction base="string">
+			<pattern value="[A-Z]{4}[A-Z]{2}[A-Z\d]{2}([A-Z\d]{3})?" />
+		</restriction>
+	</simpleType>
+	<complexType name="StandingOrderExt">
+		<annotation>
+			<documentation>standing order extension. Extends basic payment information with information required for standing order setup</documentation>
+		</annotation>
+		<sequence>
+			<element name="Day" type="integer" minOccurs="0" bysquare:maxLength="2" bysquare:priority="999" bysquare:order="1">
+				<annotation>
+					<documentation>this is the payment day. It‘s meaning depends on the periodicity, meaning either day of the month (number between 1 and 31) or day of the week (1=Monday, 2=Tuesday, …, 7=Sunday).</documentation>
+				</annotation>
+			</element>
+			<element name="Month" type="tns:MultipleMonths" minOccurs="0" bysquare:maxLength="4" bysquare:priority="999" bysquare:order="2">
+				<annotation>
+					<documentation>selection of months on which payment occurs. If used, set periodicity to "Annually". If payment occurs every month or every other month consider setting periodicity to "Monthly" or "Bimonthly" instead.</documentation>
+				</annotation>
+			</element>
+			<element name="Periodicity" type="tns:Periodicity" bysquare:maxLength="1" bysquare:priority="999" bysquare:order="3">
+				<annotation>
+					<documentation>periodicity of the standing order</documentation>
+				</annotation>
+			</element>
+			<element name="LastDate" type="date" minOccurs="0" bysquare:maxLength="8" bysquare:priority="999" bysquare:order="4">
+				<annotation>
+					<documentation>date of the last payment of the standing order</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<complexType name="DirectDebitExt">
+		<annotation>
+			<documentation>direct debit extension. Extends basic payment information with information required for identification and setup of direct debit</documentation>
+		</annotation>
+		<sequence>
+			<element name="DirectDebitScheme" type="tns:DirectDebitScheme" bysquare:maxLength="1" bysquare:priority="999" bysquare:order="1">
+				<annotation>
+					<documentation>direct debit scheme, can be "SEPA" or "other". Use "SEPA" if direct debit complies with SEPA direct debit scheme</documentation>
+				</annotation>
+			</element>
+			<element name="DirectDebitType" type="tns:DirectDebitType" bysquare:maxLength="1" bysquare:priority="999" bysquare:order="2">
+				<annotation>
+					<documentation>type of direct debit, can be "one-off" or "recurrent"
+					</documentation>
+				</annotation>
+			</element>
+			<choice minOccurs="0">
+				<sequence>
+					<element name="VariableSymbol" type="tns:VariableSymbol" minOccurs="0" bysquare:maxLength="10" bysquare:priority="4" bysquare:order="3">
+						<annotation>
+							<documentation>variable symbol</documentation>
+						</annotation>
+					</element>
+					<element name="SpecificSymbol" type="tns:SpecificSymbol" minOccurs="0" bysquare:maxLength="10" bysquare:priority="3" bysquare:order="4">
+						<annotation>
+							<documentation>specific symbol</documentation>
+						</annotation>
+					</element>
+				</sequence>
+				<element name="OriginatorsReferenceInformation" type="string" minOccurs="0" bysquare:maxLength="35" bysquare:priority="11" bysquare:order="5">
+					<annotation>
+						<documentation>reference information</documentation>
+					</annotation>
+				</element>
+				<sequence>
+					<element name="MandateID" type="string" bysquare:maxLength="35" bysquare:priority="10" bysquare:order="6">
+						<annotation>
+							<documentation>identification of the mandate between creditor and debtor</documentation>
+						</annotation>
+					</element>
+					<element name="CreditorID" type="string" bysquare:maxLength="35" bysquare:priority="9" bysquare:order="7">
+						<annotation>
+							<documentation>identification of the creditor</documentation>
+						</annotation>
+					</element>
+					<element name="ContractID" type="string" minOccurs="0" bysquare:maxLength="35" bysquare:priority="8" bysquare:order="8">
+						<annotation>
+							<documentation>identification of the contract between creditor and debtor</documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</choice>
+			<element name="MaxAmount" type="decimal" minOccurs="0" bysquare:maxLength="15" bysquare:priority="999" bysquare:order="9">
+				<annotation>
+					<documentation>maximum amount that can be debited</documentation>
+				</annotation>
+			</element>
+			<element name="ValidTillDate" type="date" minOccurs="0" bysquare:maxLength="8" bysquare:priority="999" bysquare:order="10">
+				<annotation>
+					<documentation>direct debit valid till date</documentation>
+				</annotation>
+			</element>
+		</sequence>
+	</complexType>
+	<simpleType name="DirectDebitScheme">
+		<annotation>
+			<documentation>direct debit scheme, can be "SEPA" or "other". Use "SEPA" if direct debit complies with SEPA direct debit scheme</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="other">
+				<annotation>
+					<appinfo>0</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="SEPA">
+				<annotation>
+					<appinfo>1</appinfo>
+				</annotation>
+			</enumeration>
+		</restriction>
+	</simpleType>
+	<simpleType name="DirectDebitType">
+		<annotation>
+			<documentation>type of direct debit, can be "one-off" or "recurrent"</documentation>
+		</annotation>
+		<restriction base="string">
+			<enumeration value="one-off">
+				<annotation>
+					<appinfo>0</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="recurrent">
+				<annotation>
+					<appinfo>1</appinfo>
+				</annotation>
+			</enumeration>
+		</restriction>
+	</simpleType>
+	<simpleType name="Periodicity">
+		<restriction base="string">
+			<enumeration value="Daily">
+				<annotation>
+					<appinfo>d</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="Weekly">
+				<annotation>
+					<appinfo>w</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="Biweekly">
+				<annotation>
+					<appinfo>b</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="Monthly">
+				<annotation>
+					<appinfo>m</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="Bimonthly">
+				<annotation>
+					<appinfo>B</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="Quarterly">
+				<annotation>
+					<appinfo>q</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="Annually">
+				<annotation>
+					<appinfo>a</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="Semiannually">
+				<annotation>
+					<appinfo>s</appinfo>
+				</annotation>
+			</enumeration>
+		</restriction>
+	</simpleType>
+	<simpleType name="Month">
+		<restriction base="string">
+			<enumeration value="January">
+				<annotation>
+					<appinfo>1</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="February">
+				<annotation>
+					<appinfo>2</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="March">
+				<annotation>
+					<appinfo>4</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="April">
+				<annotation>
+					<appinfo>8</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="May">
+				<annotation>
+					<appinfo>16</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="June">
+				<annotation>
+					<appinfo>32</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="July">
+				<annotation>
+					<appinfo>64</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="August">
+				<annotation>
+					<appinfo>128</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="September">
+				<annotation>
+					<appinfo>256</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="October">
+				<annotation>
+					<appinfo>512</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="November">
+				<annotation>
+					<appinfo>1024</appinfo>
+				</annotation>
+			</enumeration>
+			<enumeration value="December">
+				<annotation>
+					<appinfo>2048</appinfo>
+				</annotation>
+			</enumeration>
+		</restriction>
+	</simpleType>
+	<simpleType name="MultipleMonths">
+		<list itemType="tns:Month"></list>
+	</simpleType>
+</schema>

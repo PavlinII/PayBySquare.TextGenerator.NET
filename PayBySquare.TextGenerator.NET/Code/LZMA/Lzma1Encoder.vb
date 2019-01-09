@@ -1,6 +1,13 @@
 ﻿
 Namespace LZMA
 
+    'Lzma1Encoder is based on C# managed-lzma project.
+    'https://github.com/weltkante/managed-lzma
+
+    'Do NOT rewrite this LZMA namespace back to C#, that would be waste of time.
+    'Link to managed-lzma project directly (start with ManagedLzma.LZMA.AsyncEncoder) or use it's content to replace local code structure.
+    'Original code was cleaned to remain only LZMA1-related stuff. Constants, members and method's names were slightly renamed.
+
     Public Class Lzma1Encoder
 
 #Region "Constants"
