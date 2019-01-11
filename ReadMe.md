@@ -1,10 +1,10 @@
-﻿# PayBySquare standalone QR text generator for .NET
+﻿# PayBySquare generátor QR textů pro .NET
 
 Projekt obsahuje nezávislou knihovnu pro slovenský PayBySquare standard QR plateb.
 
 PayBySquare standard byl vytvořen společností ADELANTE, s.r.o. s hlavním důrazem na zbytečnou složitost a obtížnou implementaci tak, aby běžní uživatelé QR plateb museli platit výpalné této společnosti. PayBySquare.TextGenerator.NET řeší tento problém pro implementace v .NET.
 
-# PayBySquare generátor QR textů pro .NET
+# PayBySquare standalone QR text generator for .NET
 
 This project provides standalone library for Slovak PayBySquare QR payment standard.
 
