@@ -6,7 +6,7 @@ Public Class Payment
     Public CurrencyCode As String
     Public BankAccounts As New List(Of BankAccount)
 
-    'Optinal
+    'Optional
     Public VariableSymbol, ConstantSymbol, SpecificSymbol, PaymentNote, BeneficiaryName, BeneficiaryAddressLine1, BeneficiaryAddressLine2 As String
     Public PaymentDueDate? As Date
 
