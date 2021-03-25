@@ -4,6 +4,11 @@
     <RootNamespace>PayBySquareTextGenerator</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Ing. Pavel Mikula</Authors>
+    <Description>This project provides standalone library for Slovak PayBySquare QR payment standard.</Description>
+    <Copyright></Copyright>
+    <PackageProjectUrl>https://github.com/PavlinII/PayBySquare.TextGenerator.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/PavlinII/PayBySquare.TextGenerator.NET</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>
