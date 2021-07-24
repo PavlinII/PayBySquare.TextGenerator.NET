@@ -1,0 +1,15 @@
+{
+  "ServerUri": "https://sonarcloud.io/",
+  "Organization": {
+    "Key": "pavlinii",
+    "Name": "PavlinII"
+  },
+  "ProjectKey": "PayBySquare.TextGenerator.NET",
+  "ProjectName": "PayBySquare.TextGenerator.NET",
+  "Profiles": {
+    "VB": {
+      "ProfileKey": "AXraOCSKJSgdLt0cH-TS",
+      "ProfileTimestamp": "2021-07-24T20:44:33Z"
+    }
+  }
+}
