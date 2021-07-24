@@ -5,22 +5,22 @@ Imports System.Security.Cryptography
 Friend Class Crc32
     Inherits HashAlgorithm
 
-    Private Const fPolynom As UInteger = &HEDB88320UI
+    Private Const Polynom As UInteger = &HEDB88320UI
 
-    Friend fTable(255) As UInteger
+    Friend RawData(255) As UInteger
 
     Private fValue As UInteger
 
     Public Sub New()
-        Me.HashSizeValue = 32
+        HashSizeValue = 32
         Initialize()
     End Sub
 
-    Protected Overrides Sub HashCore(array() As Byte, ibStart As Integer, cbSize As Integer)
+    Protected Overrides Sub HashCore(Array() As Byte, IbStart As Integer, CbSize As Integer)
         Dim i As Integer, ti As Byte
-        For i = 0 To cbSize - 1
-            ti = CByte(fValue And &HFFUI) Xor array(i)
-            fValue = (fValue >> 8) Xor fTable(ti)
+        For i = 0 To CbSize - 1
+            ti = CByte(fValue And &HFFUI) Xor Array(i)
+            fValue = (fValue >> 8) Xor RawData(ti)
         Next
     End Sub
 
@@ -40,12 +40,12 @@ Friend Class Crc32
             v = i
             For b = 0 To 7
                 If (v And 1) = 1 Then
-                    v = (v >> 1) Xor fPolynom
+                    v = (v >> 1) Xor Polynom
                 Else
                     v >>= 1
                 End If
             Next
-            fTable(CInt(i)) = v
+            RawData(CInt(i)) = v
         Next
         fValue = UInteger.MaxValue      '&HFFFFFFFF
     End Sub

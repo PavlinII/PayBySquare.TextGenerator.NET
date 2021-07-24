@@ -9,6 +9,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "PayBySquare.TextGenerator.N
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B51E3DFF-9B50-4CBA-A995-01FC6183FB2E}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		azure-pipelines.yml = azure-pipelines.yml
 		bysquare-pay-1_1_0.xsd = bysquare-pay-1_1_0.xsd
 		License.txt = License.txt

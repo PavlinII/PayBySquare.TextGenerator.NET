@@ -21,7 +21,7 @@ Friend Class TabSerializer
     End Sub
 
     Public Overrides Function ToString() As String
-        Return fSB.ToString.TrimEnd(vbTab)
+        Return fSB.ToString.TrimEnd(vbTab(0))
     End Function
 
 End Class

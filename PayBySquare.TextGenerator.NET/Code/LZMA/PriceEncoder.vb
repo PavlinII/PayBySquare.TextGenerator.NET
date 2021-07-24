@@ -20,7 +20,7 @@ Namespace LZMA
         Private fPrices(PB_STATES_MAX - 1)() As UInteger
 
         Public Sub New(ProbPrices() As UInteger, PosStates As Integer)
-            Dim SymbolCnt As Integer = FastBytes + 1 - Lzma1Encoder.MATCH_LEN_MIN
+            Dim SymbolCnt As Integer = FastBytes + 1 - Lzma1Encoder.MatchLenMin
             For i As Integer = 0 To fPrices.Length - 1
                 fPrices(i) = New UInteger(SymbolsTotal - 1) {}
             Next

@@ -12,13 +12,13 @@ Namespace LZMA
 
 #Region "Constants"
 
-        Friend Const MATCH_LEN_MIN As UInteger = 2
+        Friend Const MatchLenMin As UInteger = 2
 
-        Private Const MATCH_LEN_MAX As Integer = MATCH_LEN_MIN + PriceEncoder.SymbolsTotal - 1
+        Private Const MatchLenMax As Integer = MatchLenMin + PriceEncoder.SymbolsTotal - 1
         Private Const PriceShiftBits As Integer = 4
         Private Const LogBits As UInteger = 9 + 4 '9 + sizeof(Of Long) / 2
-        Private Const kDicLogSizeMaxCompress As Integer = ((LogBits - 1) * 2 + 7)
-        Private Const LZMA_NUM_REPS As UInteger = 4
+        Private Const DicLogSizeMaxCompress As Integer = ((LogBits - 1) * 2 + 7)
+        Private Const LzmaNumReps As UInteger = 4
         Private Const OptCnt As Integer = (1 << 12)
         Private Const LenToPosStates As Integer = 4
         Private Const PosSlotBits As Integer = 6
@@ -30,10 +30,10 @@ Namespace LZMA
         Private Const FullDistances As Integer = (1 << (EndPosModelIndex >> 1))
         Private Const StatesCnt As Integer = 12
 
-        Private ReadOnly LiteralNextStates() As Integer = {0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 4, 5}
-        Private ReadOnly MatchNextStates() As Integer = {7, 7, 7, 7, 7, 7, 7, 10, 10, 10, 10, 10}
-        Private ReadOnly RepNextStates() As Integer = {8, 8, 8, 8, 8, 8, 8, 11, 11, 11, 11, 11}
-        Private ReadOnly ShortRepNextStates() As Integer = {9, 9, 9, 9, 9, 9, 9, 11, 11, 11, 11, 11}
+        Private ReadOnly fLiteralNextStates() As Integer = {0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 4, 5}
+        Private ReadOnly fMatchNextStates() As Integer = {7, 7, 7, 7, 7, 7, 7, 10, 10, 10, 10, 10}
+        Private ReadOnly fRepNextStates() As Integer = {8, 8, 8, 8, 8, 8, 8, 11, 11, 11, 11, 11}
+        Private ReadOnly fShortRepNextStates() As Integer = {9, 9, 9, 9, 9, 9, 9, 11, 11, 11, 11, 11}
 
 #End Region
 
@@ -50,7 +50,7 @@ Namespace LZMA
         Private fNowPos64 As ULong
         Private fFastPos((1 << LogBits) - 1) As Byte
         Private fProbPrices((BitModelTotal >> MoveReducingBits) - 1) As UInteger
-        Private fMatches(MATCH_LEN_MAX * 2 + 2 + 1 - 1) As UInteger
+        Private fMatches(MatchLenMax * 2 + 2 + 1 - 1) As UInteger
         Private fLitProbs() As UShort
         Private fIsRep(StatesCnt - 1) As UShort
         Private fIsRepG0(StatesCnt - 1) As UShort
@@ -117,7 +117,7 @@ Namespace LZMA
         Public Function Encode(InputData() As Byte) As Byte()
             Dim Ret As New List(Of Byte)
             fRange = New RangeEncoder(Ret)
-            fMatchFinder = New MatchFinder(InputData, OptCnt, FastBytes, MATCH_LEN_MAX)
+            fMatchFinder = New MatchFinder(InputData, OptCnt, FastBytes, MatchLenMax)
             fLenEnc = New PriceEncoder(fProbPrices, 1 << PB)
             fRepLenEnc = New PriceEncoder(fProbPrices, 1 << PB)
             fReps = New OptimumReps()
@@ -170,7 +170,7 @@ Namespace LZMA
                 End If
                 ReadMatchDistances(0)
                 fRange.EncodeBit(fIsMatch(fState)(0), False)
-                fState = LiteralNextStates(fState)
+                fState = fLiteralNextStates(fState)
                 fRange.Encode(fLitProbs, 0, fMatchFinder.Buffer(fMatchFinder.BufferPos - CInt(fAdditionalOffset)))
                 fAdditionalOffset -= 1UI
                 NowPos32 += 1UI
@@ -189,10 +189,10 @@ Namespace LZMA
                         Else
                             fRange.EncodeMatched(fLitProbs, ProbsPos, fMatchFinder.Buffer(BufferPos), fMatchFinder.Buffer(BufferPos - CInt(fReps.x0) - 1))
                         End If
-                        fState = LiteralNextStates(fState)
+                        fState = fLiteralNextStates(fState)
                     Else
                         fRange.EncodeBit(fIsMatch(fState)(PosState), True)
-                        If Pos < LZMA_NUM_REPS Then
+                        If Pos < LzmaNumReps Then
                             fRange.EncodeBit(fIsRep(fState), True)
                             If Pos = 0 Then
                                 fRange.EncodeBit(fIsRepG0(fState), False)
@@ -213,16 +213,16 @@ Namespace LZMA
                             End If
 
                             If Len = 1 Then
-                                fState = ShortRepNextStates(fState)
+                                fState = fShortRepNextStates(fState)
                             Else
-                                fRepLenEnc.Encode(fRange, Len - MATCH_LEN_MIN, PosState)
-                                fState = RepNextStates(fState)
+                                fRepLenEnc.Encode(fRange, Len - MatchLenMin, PosState)
+                                fState = fRepNextStates(fState)
                             End If
                         Else
                             fRange.EncodeBit(fIsRep(fState), False)
-                            fState = MatchNextStates(fState)
-                            fLenEnc.Encode(fRange, Len - MATCH_LEN_MIN, PosState)
-                            Pos -= LZMA_NUM_REPS
+                            fState = fMatchNextStates(fState)
+                            fLenEnc.Encode(fRange, Len - MatchLenMin, PosState)
+                            Pos -= LzmaNumReps
                             PosSlot = GetPosSlot(Pos)
                             fRange.TreeEncode(fPosSlotEncoder(LenToPosState(CInt(Len))), 0, PosSlotBits, PosSlot)
 
@@ -295,7 +295,7 @@ Namespace LZMA
 
         Private Function ReadMatchDistances(ByRef RetPairs As Integer) As UInteger
             Dim AvailCnt, PBy As Integer, Ret, Distance As UInteger
-            AvailCnt = If(fMatchFinder.AvailableBytes() > MATCH_LEN_MAX, MATCH_LEN_MAX, CInt(fMatchFinder.AvailableBytes()))
+            AvailCnt = If(fMatchFinder.AvailableBytes() > MatchLenMax, MatchLenMax, CInt(fMatchFinder.AvailableBytes()))
             RetPairs = fMatchFinder.Hc4FindMatches(fMatches)
             If RetPairs > 0 Then
                 Ret = fMatches(RetPairs - 2)
@@ -322,9 +322,9 @@ Namespace LZMA
             Avail = fMatchFinder.AvailableBytes()
             RetBack = UInteger.MaxValue
             If Avail < 2 Then Return 1
-            If Avail > MATCH_LEN_MAX Then Avail = MATCH_LEN_MAX
+            If Avail > MatchLenMax Then Avail = MatchLenMax
             BufferPos = fMatchFinder.BufferPos - 1
-            For i = 0 To LZMA_NUM_REPS - 1
+            For i = 0 To LzmaNumReps - 1
                 If fMatchFinder.Buffer(BufferPos) <> fMatchFinder.Buffer(BufferPos - CInt(fReps(i)) - 1) OrElse fMatchFinder.Buffer(BufferPos + 1) <> fMatchFinder.Buffer(BufferPos - CInt(fReps(i))) Then
                     Continue For
                 End If
@@ -343,7 +343,7 @@ Namespace LZMA
                 End If
             Next
             If Ret >= FastBytes Then
-                RetBack = fMatches(PairCnt - 1) + LZMA_NUM_REPS
+                RetBack = fMatches(PairCnt - 1) + LzmaNumReps
                 MovePos(Ret - 1UI)
                 Return Ret
             End If
@@ -373,7 +373,7 @@ Namespace LZMA
                 End If
             End If
             BufferPos = fMatchFinder.BufferPos - 1
-            For i = 0 To LZMA_NUM_REPS - 1
+            For i = 0 To LzmaNumReps - 1
                 If fMatchFinder.Buffer(BufferPos) <> fMatchFinder.Buffer(BufferPos - CInt(fReps(i)) - 1) OrElse fMatchFinder.Buffer(BufferPos + 1) <> fMatchFinder.Buffer(BufferPos - CInt(fReps(i))) Then
                     Continue For
                 End If
@@ -383,7 +383,7 @@ Namespace LZMA
                 End While
                 If Len >= Ret - 1 Then Return 1
             Next
-            RetBack = MainDist + LZMA_NUM_REPS
+            RetBack = MainDist + LzmaNumReps
             MovePos(Ret - 2UI)
             Return Ret
         End Function

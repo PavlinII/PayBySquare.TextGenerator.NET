@@ -98,18 +98,18 @@ Namespace LZMA
         End Sub
 
         Private Sub Normalize()
-            Dim subValue As UInteger
-            subValue = (fPos - DictSize - 1UI) And NormalizeMask
+            Dim SubValue As UInteger
+            SubValue = (fPos - DictSize - 1UI) And NormalizeMask
             For i As Integer = 0 To CInt(fHashSizeSum + DictSize)
-                If fHash(i) <= subValue Then
+                If fHash(i) <= SubValue Then
                     fHash(i) = 0    'Empty hash
                 Else
-                    fHash(i) -= subValue
+                    fHash(i) -= SubValue
                 End If
             Next
-            fPosLimit -= subValue 'Posunout offset
-            fPos -= subValue
-            fStreamPos -= subValue
+            fPosLimit -= SubValue 'Posunout offset
+            fPos -= SubValue
+            fStreamPos -= SubValue
         End Sub
 
         Private Sub CheckLimits()
@@ -157,10 +157,10 @@ Namespace LZMA
                 MovePos()
                 Return 0
             End If
-            Temp = fCrc.fTable(Buffer(BufferPos)) Xor Buffer(BufferPos + 1)
+            Temp = fCrc.RawData(Buffer(BufferPos)) Xor Buffer(BufferPos + 1)
             Hash2 = Temp And (Hash2Size - 1UI)
             Hash3 = (Temp Xor (CUInt(Buffer(BufferPos + 2)) << 8)) And (Hash3Size - 1UI)
-            Hash = (Temp Xor (CUInt(Buffer(BufferPos + 2)) << 8) Xor (fCrc.fTable(Buffer(BufferPos + 3)) << 5)) And fHashMask
+            Hash = (Temp Xor (CUInt(Buffer(BufferPos + 2)) << 8) Xor (fCrc.RawData(Buffer(BufferPos + 3)) << 5)) And fHashMask
             Delta2 = fPos - fHash(CInt(Hash2))
             Delta3 = fPos - fHash(CInt(Fix3HashSize + Hash3))
             CurMatch = fHash(CInt(Fix4HashSize + Hash))
@@ -209,10 +209,10 @@ Namespace LZMA
                 If fLenLimit < 4 Then
                     MovePos()
                 Else
-                    Temp = fCrc.fTable(Buffer(BufferPos)) Xor Buffer(BufferPos + 1)
+                    Temp = fCrc.RawData(Buffer(BufferPos)) Xor Buffer(BufferPos + 1)
                     Hash2 = Temp And (Hash2Size - 1UI)
                     Hash3 = (Temp Xor (CUInt(Buffer(BufferPos + 2)) << 8)) And (Hash3Size - 1UI)
-                    Hash = (Temp Xor (CUInt(Buffer(BufferPos + 2)) << 8) Xor (fCrc.fTable(Buffer(BufferPos + 3)) << 5)) And fHashMask
+                    Hash = (Temp Xor (CUInt(Buffer(BufferPos + 2)) << 8) Xor (fCrc.RawData(Buffer(BufferPos + 3)) << 5)) And fHashMask
                     CurMatch = fHash(CInt(Fix4HashSize + Hash))
                     fHash(CInt(Hash2)) = fPos
                     fHash(CInt(Fix3HashSize + Hash3)) = fPos

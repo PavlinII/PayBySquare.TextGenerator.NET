@@ -9,6 +9,18 @@
     <PackageProjectUrl>https://github.com/PavlinII/PayBySquare.TextGenerator.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/PavlinII/PayBySquare.TextGenerator.NET</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <OptionStrict>On</OptionStrict>
+    <OptionInfer>Off</OptionInfer>
+    <NoWarn />
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <CodeAnalysisRuleSet>..\.sonarlint\paybysquare.textgenerator.netvb.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
+  <ItemGroup>
+    <AdditionalFiles Include="..\.sonarlint\paybysquare.textgenerator.net\VB\SonarLint.xml" Link="SonarLint.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
 </Project>
