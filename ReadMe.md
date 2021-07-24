@@ -16,7 +16,7 @@ There are different options to consume this library:
 
 * Reference [NuGet package](https://www.nuget.org/packages/PayBySquare.TextGenerator.NET/1.0.0) in your project.
 * Download DLL from [Releases](https://github.com/PavlinII/PayBySquare.TextGenerator.NET/releases)
-* Clone this repository into your project as a submodule or just copy it's content and ass a project reference.
+* Clone this repository into your project as a submodule or just copy it's content as a project reference.
 
 ## Getting started
 
