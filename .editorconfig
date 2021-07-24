@@ -1,0 +1,4 @@
+﻿[*.vb]
+
+# S1197: Array designators "()" should be on the type, not the variable
+dotnet_diagnostic.S1197.severity = none
