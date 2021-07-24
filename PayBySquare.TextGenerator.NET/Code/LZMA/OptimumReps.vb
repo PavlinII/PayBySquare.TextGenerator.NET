@@ -15,12 +15,12 @@ Namespace LZMA
                     Case Else : Throw New InvalidOperationException
                 End Select
             End Get
-            Set(value As UInteger)
+            Set(Value As UInteger)
                 Select Case Index
-                    Case 0 : x0 = value
-                    Case 1 : x1 = value
-                    Case 2 : x2 = value
-                    Case 3 : x3 = value
+                    Case 0 : x0 = Value
+                    Case 1 : x1 = Value
+                    Case 2 : x2 = Value
+                    Case 3 : x3 = Value
                     Case Else : Throw New InvalidOperationException
                 End Select
             End Set

@@ -59,9 +59,9 @@ Namespace LZMA
         Private fPosAlignEncoder((1 << AlignBits) - 1) As UShort
         Private fPosEncoders(FullDistances - EndPosModelIndex - 1) As UShort
 
-        Private fIsMatch As UShort()() = Init(Of UShort)(StatesCnt, PB_STATES_MAX)
-        Private fIsRep0Long As UShort()() = Init(Of UShort)(StatesCnt, PB_STATES_MAX)
-        Private fPosSlotEncoder As UShort()() = Init(Of UShort)(LenToPosStates, 1 << PosSlotBits)
+        Private fIsMatch As UShort()() = Init(Of UShort)(PbStatesMax)
+        Private fIsRep0Long As UShort()() = Init(Of UShort)(PbStatesMax)
+        Private fPosSlotEncoder As UShort()() = Init(Of UShort)(1 << PosSlotBits)
 
 #End Region
 
@@ -72,7 +72,7 @@ Namespace LZMA
 
 #Region "Init"
 
-        Private Function Init(Of ItemType)(Size1 As Integer, Size2 As Integer) As ItemType()()
+        Private Function Init(Of ItemType)(Size2 As Integer) As ItemType()()
             Dim Ret(Size2 - 1)() As ItemType
             For i As Integer = 0 To Ret.Length - 1
                 Ret(i) = New ItemType(Size2 - 1) {}
@@ -135,7 +135,7 @@ Namespace LZMA
             fNowPos64 = 0
             fLitProbs = Enumerable.Repeat(Of UShort)(ProbInitValue, &H300 << (LC + LP)).ToArray
             For i = 0 To StatesCnt - 1
-                For j = 0 To PB_STATES_MAX - 1
+                For j = 0 To PbStatesMax - 1
                     fIsMatch(i)(j) = ProbInitValue
                     fIsRep0Long(i)(j) = ProbInitValue
                 Next
@@ -364,13 +364,12 @@ Namespace LZMA
             End If
             If Ret < 2 OrElse Avail <= 2 Then Return 1
             fLongestMatchLength = ReadMatchDistances(fPairCnt)
-            If fLongestMatchLength >= 2 Then
-                If (fLongestMatchLength >= Ret AndAlso fMatches(fPairCnt - 1) < MainDist) OrElse
-                            (fLongestMatchLength = Ret + 1 AndAlso Not ChangePair(MainDist, fMatches(fPairCnt - 1))) OrElse
-                            (fLongestMatchLength > Ret + 1) OrElse
-                            (fLongestMatchLength + 1 >= Ret AndAlso Ret >= 3 AndAlso ChangePair(fMatches(fPairCnt - 1), MainDist)) Then
-                    Return 1
-                End If
+            If fLongestMatchLength >= 2 AndAlso (
+                (fLongestMatchLength >= Ret AndAlso fMatches(fPairCnt - 1) < MainDist) OrElse
+                (fLongestMatchLength = Ret + 1 AndAlso Not ChangePair(MainDist, fMatches(fPairCnt - 1))) OrElse
+                (fLongestMatchLength > Ret + 1) OrElse
+                (fLongestMatchLength + 1 >= Ret AndAlso Ret >= 3 AndAlso ChangePair(fMatches(fPairCnt - 1), MainDist))) Then
+                Return 1
             End If
             BufferPos = fMatchFinder.BufferPos - 1
             For i = 0 To LzmaNumReps - 1

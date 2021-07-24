@@ -14,10 +14,10 @@ Namespace LZMA
 
         Private fChoice1 As UShort = ProbInitValue
         Private fChoice2 As UShort = ProbInitValue
-        Private fLow() As UShort = Enumerable.Repeat(ProbInitValue, PB_STATES_MAX << LowBits).ToArray
-        Private fMid() As UShort = Enumerable.Repeat(ProbInitValue, PB_STATES_MAX << MidBits).ToArray
+        Private fLow() As UShort = Enumerable.Repeat(ProbInitValue, PbStatesMax << LowBits).ToArray
+        Private fMid() As UShort = Enumerable.Repeat(ProbInitValue, PbStatesMax << MidBits).ToArray
         Private fHigh() As UShort = Enumerable.Repeat(ProbInitValue, HighSymbols).ToArray
-        Private fPrices(PB_STATES_MAX - 1)() As UInteger
+        Private fPrices(PbStatesMax - 1)() As UInteger
 
         Public Sub New(ProbPrices() As UInteger, PosStates As Integer)
             Dim SymbolCnt As Integer = FastBytes + 1 - Lzma1Encoder.MatchLenMin
@@ -66,13 +66,13 @@ Namespace LZMA
             Dim Ret As UInteger
             Symbol = Symbol Or (1UI << BitLevels)
             While Symbol <> 1
-                Ret += GET_PRICE(ProbPrices, Probs(ProbsPos + CInt(Symbol >> 1)), (Symbol And 1UI) <> 0)
+                Ret += GetPrice(ProbPrices, Probs(ProbsPos + CInt(Symbol >> 1)), (Symbol And 1UI) <> 0)
                 Symbol >>= 1
             End While
             Return Ret
         End Function
 
-        Private Function GET_PRICE(ProbPrices() As UInteger, Prob As UShort, Symbol As Boolean) As UInteger
+        Private Function GetPrice(ProbPrices() As UInteger, Prob As UShort, Symbol As Boolean) As UInteger
             Return ProbPrices((Prob Xor (If(Symbol, Integer.MaxValue, 0) And (BitModelTotal - 1))) >> MoveReducingBits)
         End Function
 

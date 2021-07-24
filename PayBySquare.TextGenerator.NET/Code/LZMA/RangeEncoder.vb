@@ -44,11 +44,11 @@ Namespace LZMA
             fLow = (fLow << 8) And UInteger.MaxValue
         End Sub
 
-        Public Sub EncodeDirectBits(value As UInteger, BitCnt As Integer)
+        Public Sub EncodeDirectBits(Value As UInteger, BitCnt As Integer)
             While BitCnt <> 0
                 fRange >>= 1
                 BitCnt -= 1
-                If (value And (1 << BitCnt)) <> 0 Then fLow += fRange
+                If (Value And (1 << BitCnt)) <> 0 Then fLow += fRange
                 If fRange < TopValue Then
                     fRange <<= 8
                     ShiftLow()
