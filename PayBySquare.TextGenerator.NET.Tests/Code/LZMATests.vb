@@ -1,5 +1,4 @@
 ﻿
-Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports PayBySquareTextGenerator.LZMA
 
 <TestClass>
