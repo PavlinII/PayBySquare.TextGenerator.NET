@@ -3,13 +3,13 @@
 Public Class PayBySquareOverkillTests
 
     <TestMethod>
-    Sub BasicPaymentTest()
+    Sub BasicPayment()
         Dim Gen As New PayBySquareOverkill("CZ1720100000002800266981", 1235.8D, "EUR", "654321", "PayBySquareOverkill")
         Assert.AreEqual("00054000CUJ17AUG92PSOB3F1IA17JL9Q3C3SAU6AG42CGGIFROV0B3E34GR8M8UODIPGNAQ10LV7UEN52PVVLL5A6K1Q9F8TLUSUVBQG8JUN2TJSEKSR7POADRS3KF10", Gen.GeneratePayBySquareOverkillString)
     End Sub
 
     <TestMethod>
-    Sub ComplexPaymentTest()
+    Sub ComplexPayment()
         Dim Gen As New PayBySquareOverkill, P As Payment
         Gen.InvoiceID = "X-4242"
         P = New Payment

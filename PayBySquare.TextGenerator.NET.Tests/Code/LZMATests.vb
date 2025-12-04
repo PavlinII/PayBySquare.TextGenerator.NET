@@ -8,7 +8,7 @@ Public Class LZMATests
     Dim TestOut() As Byte = {0, 103, 166, 19, 171, 208, 72, 179, 204, 44, 111, 12, 148, 19, 206, 169, 208, 216, 62, 43, 198, 84, 8, 38, 66, 18, 126, 241, 240, 44, 110, 25, 33, 180, 89, 30, 195, 101, 152, 93, 90, 8, 43, 243, 249, 215, 40, 179, 255, 214, 165, 81, 168, 29, 37, 232, 237, 125, 207, 125, 122, 130, 39, 235, 139, 179, 227, 169, 205, 159, 56, 83, 119, 193, 209, 225}
 
     <TestMethod>
-    Sub SimpleEncodeTest()
+    Sub SimpleEncode()
         Dim Enc As New Lzma1Encoder
         Dim Output() As Byte = Enc.Encode(TestIn)
         Assert.IsNotNull(Output, "Output is Nothing")
@@ -16,7 +16,7 @@ Public Class LZMATests
     End Sub
 
     <TestMethod>
-    Sub ReuseEncoderTest()
+    Sub ReuseEncoder()
         Dim Enc As New Lzma1Encoder
         Dim OutputA() As Byte = Enc.Encode(TestIn)
         Dim OutputB() As Byte = Enc.Encode(TestIn)
