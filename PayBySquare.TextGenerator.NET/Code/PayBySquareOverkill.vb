@@ -27,7 +27,9 @@ Public Class PayBySquareOverkill
             TS.Append(P.VariableSymbol)
             TS.Append(P.ConstantSymbol)
             TS.Append(P.SpecificSymbol)
-            TS.Append(CStr(Nothing))        'OriginatorsReferenceInformation (VS, SS a KS in SEPA format) - only if VS, KS and SS are empty
+            TS.Append(If(String.IsNullOrWhiteSpace(P.VariableSymbol) AndAlso
+                         String.IsNullOrWhiteSpace(P.ConstantSymbol) AndAlso
+                         String.IsNullOrWhiteSpace(P.SpecificSymbol), P.PayerReference, CStr(Nothing))) 'OriginatorsReferenceInformation (VS, SS a KS in SEPA format) - only if VS, KS and SS are empty
             TS.Append(If(P.PaymentNote IsNot Nothing AndAlso P.PaymentNote.Length > 140, P.PaymentNote.Substring(0, 140), P.PaymentNote))
             TS.Append(P.BankAccounts.Count)
             For Each BA As BankAccount In P.BankAccounts
