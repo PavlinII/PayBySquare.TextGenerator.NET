@@ -7,7 +7,7 @@ Public Class Payment
     Public BankAccounts As New List(Of BankAccount)
 
     'Optional
-    Public VariableSymbol, ConstantSymbol, SpecificSymbol, PaymentNote, BeneficiaryName, BeneficiaryAddressLine1, BeneficiaryAddressLine2 As String
+    Public VariableSymbol, ConstantSymbol, SpecificSymbol, PaymentNote, BeneficiaryName, BeneficiaryAddressLine1, BeneficiaryAddressLine2, PayerReference As String
     Public PaymentDueDate? As Date
 
     Public Sub New()
