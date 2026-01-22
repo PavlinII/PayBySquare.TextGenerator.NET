@@ -6,9 +6,10 @@ schedules:
     include:
     - master
   always: true
-  
+
 trigger:
 - master
+- test
 
 pool:
   vmImage: 'windows-latest'
@@ -44,6 +45,16 @@ steps:
     command: 'test'
 
 - task: SonarCloudAnalyze@1
+
+- powershell: |
+    dotnet pack --no-build --no-restore --output $(Build.ArtifactStagingDirectory)/NuGets /p:BuildNumber=$(Build.BuildId) PayBySquare.TextGenerator.NET\PayBySquare.TextGenerator.NET.vbproj
+  displayName: Pack
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/NuGets'
+    artifactName: 'NuGetPackages'
+
 
 - task: SonarCloudPublish@1
   inputs:
