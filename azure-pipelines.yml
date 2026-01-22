@@ -9,7 +9,6 @@ schedules:
 
 trigger:
 - master
-- test
 
 pool:
   vmImage: 'windows-latest'
@@ -26,7 +25,7 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: SonarCloudPrepare@1
+- task: SonarCloudPrepare@4
   inputs:
     SonarCloud: 'SonarCloud PayBySquare.NET Service Connection'
     organization: 'pavlinii'
@@ -44,7 +43,7 @@ steps:
   inputs:
     command: 'test'
 
-- task: SonarCloudAnalyze@1
+- task: SonarCloudAnalyze@4
 
 - powershell: |
     dotnet pack --no-build --no-restore --output $(Build.ArtifactStagingDirectory)/NuGets /p:BuildNumber=$(Build.BuildId) PayBySquare.TextGenerator.NET\PayBySquare.TextGenerator.NET.vbproj
@@ -56,6 +55,6 @@ steps:
     artifactName: 'NuGetPackages'
 
 
-- task: SonarCloudPublish@1
+- task: SonarCloudPublish@4
   inputs:
     pollingTimeoutSec: '300'
