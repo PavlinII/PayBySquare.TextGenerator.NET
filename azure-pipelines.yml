@@ -29,7 +29,7 @@ steps:
   inputs:
     SonarCloud: 'SonarCloud PayBySquare.NET Service Connection'
     organization: 'pavlinii'
-    scannerMode: 'MSBuild'
+    scannerMode: 'dotnet'
     projectKey: 'PayBySquare.TextGenerator.NET'
     projectName: 'PayBySquare.TextGenerator.NET'
 
