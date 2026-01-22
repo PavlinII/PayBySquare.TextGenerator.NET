@@ -49,9 +49,9 @@ Public Class PayBySquareOverkill
 
     Private Sub ValidatePayment(Payment As Payment)
         If Not String.IsNullOrWhiteSpace(Payment.PayerReference) AndAlso
-           (Not String.IsNullOrWhiteSpace(Payment.VariableSymbol) OrElse
-            Not String.IsNullOrWhiteSpace(Payment.ConstantSymbol) OrElse
-            Not String.IsNullOrWhiteSpace(Payment.SpecificSymbol)) Then
+           Not (String.IsNullOrWhiteSpace(Payment.VariableSymbol) AndAlso
+                String.IsNullOrWhiteSpace(Payment.ConstantSymbol) AndAlso
+                String.IsNullOrWhiteSpace(Payment.SpecificSymbol)) Then
             Throw New InvalidOperationException("PayerReference cannot be used simultaneously with any of the variable, specific, or constant symbols. If PayerReference is used, the variable, specific, and constant symbols must all be empty.")
         End If
     End Sub
